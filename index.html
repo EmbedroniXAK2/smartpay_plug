@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>SmartPay</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+
+<h1>⚡ SmartPay Plug</h1>
+
+<input id="email" placeholder="Email"><br><br>
+<input id="password" type="password" placeholder="Password"><br><br>
+
+<button onclick="login()">Login</button>
+<button onclick="signup()">Signup</button>
+
+<hr>
+
+<h2>Payment</h2>
+
+<button onclick="pay(10)">Pay ₹10</button>
+<button onclick="pay(25)">Pay ₹25</button>
+<button onclick="pay(50)">Pay ₹50</button>
+
+<script>
+const supabaseClient = supabase.createClient(
+  "https://uaqjvcypuapzqjvdvexa.supabase.co",
+  "sb_publishable_-AquOMSbzCwxUS2YfL_HeQ_7k5UXv10"
+);
+
+async function login(){
+  const { error } = await supabaseClient.auth.signInWithPassword({
+    email: email.value,
+    password: password.value
+  });
+  alert(error ? "Login failed" : "Login success");
+}
+
+async function signup(){
+  const { error } = await supabaseClient.auth.signUp({
+    email: email.value,
+    password: password.value
+  });
+  alert(error ? "Signup failed" : "Signup success");
+}
+
+/* 🔥 PAYMENT LINKS */
+function pay(amount){
+
+  if(amount === 10){
+    window.location.href = "https://rzp.io/rzp/TnMYczJv";
+  }
+
+  else if(amount === 25){
+    window.location.href = "https://rzp.io/rzp/8uOKYlB5";
+  }
+
+  else if(amount === 50){
+    window.location.href = "https://rzp.io/rzp/02Y4FFy0";
+  }
+
+}
+</script>
+
+</body>
+</html>
