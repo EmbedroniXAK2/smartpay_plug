@@ -147,12 +147,25 @@ body{background:#020617;color:#e2e8f0}
 <div id="qr" class="page">
   <h2>Scan & Pay</h2><br>
   <div class="cards">
+
     <div class="card"><h3>₹10</h3>
-      <img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://rzp.io/rzp/TnMYczJv"></div>
+      <a href="https://rzp.io/rzp/9ixGnnK" target="_blank">
+      <img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://rzp.io/rzp/9ixGnnK">
+      </a>
+    </div>
+
     <div class="card"><h3>₹25</h3>
-      <img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://rzp.io/rzp/8uOKYlB5"></div>
+      <a href="https://rzp.io/rzp/pqDtb3dH" target="_blank">
+      <img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://rzp.io/rzp/pqDtb3dH">
+      </a>
+    </div>
+
     <div class="card"><h3>₹50</h3>
-      <img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://rzp.io/rzp/02Y4FFy0"></div>
+      <a href="https://rzp.io/rzp/mKBH5wy" target="_blank">
+      <img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://rzp.io/rzp/mKBH5wy">
+      </a>
+    </div>
+
   </div>
 </div>
 
@@ -179,13 +192,17 @@ function showPage(page,btn){
 }
 
 function pay(amount){
-  if(amount==10) window.location.href="https://rzp.io/rzp/TnMYczJv";
-  if(amount==25) window.location.href="https://rzp.io/rzp/8uOKYlB5";
-  if(amount==50) window.location.href="https://rzp.io/rzp/02Y4FFy0";
+  let url = "";
+
+  if(amount==10) url="https://rzp.io/rzp/9ixGnnK";
+  if(amount==25) url="https://rzp.io/rzp/pqDtb3dH";
+  if(amount==50) url="https://rzp.io/rzp/mKBH5wy";
+
+  window.open(url, "_blank");
 }
 </script>
 
-<!-- FIREBASE (same config as yours) -->
+<!-- FIREBASE -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { 
@@ -224,13 +241,31 @@ window.loginWithGoogle = async ()=>{
 };
 
 window.loginWithEmail = async ()=>{
-  const email = document.querySelectorAll(".login-input")[0].value;
-  const password = document.querySelectorAll(".login-input")[1].value;
+  const email = document.querySelectorAll(".login-input")[0].value.trim();
+  const password = document.querySelectorAll(".login-input")[1].value.trim();
+
+  if(!email || !password){
+    alert("Please enter email and password");
+    return;
+  }
 
   try{
     await signInWithEmailAndPassword(auth,email,password);
-  }catch{
-    await createUserWithEmailAndPassword(auth,email,password);
+  }catch(error){
+
+    if(error.code === "auth/user-not-found"){
+      try{
+        await createUserWithEmailAndPassword(auth,email,password);
+        alert("Account created successfully!");
+      }catch(e){
+        alert(e.message);
+      }
+
+    }else if(error.code === "auth/wrong-password"){
+      alert("Wrong password. Try again.");
+    }else{
+      alert(error.message);
+    }
   }
 };
 
