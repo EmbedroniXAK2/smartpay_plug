@@ -876,15 +876,7 @@ function showToast(msg,isErr){
   setTimeout(()=>t.classList.remove('show'),3000);
 }
 
-// Demo transactions
-const demoTxns=[
-  {amount:'₹25',plan:'Standard Charge',plug:'Plug A',date:'Today, 2:14 PM',icon:'⚡'},
-  {amount:'₹50',plan:'Full Charge',plug:'Plug B',date:'Today, 11:32 AM',icon:'🔋'},
-  {amount:'₹10',plan:'Quick Charge',plug:'Plug A',date:'Yesterday, 6:48 PM',icon:'⚡'},
-  {amount:'₹25',plan:'Standard Charge',plug:'Plug C',date:'Yesterday, 3:10 PM',icon:'⚡'},
-  {amount:'₹50',plan:'Full Charge',plug:'Plug A',date:'14 Apr, 9:22 AM',icon:'🔋'},
-  {amount:'₹10',plan:'Quick Charge',plug:'Plug B',date:'13 Apr, 5:55 PM',icon:'⚡'},
-];
+
 
 function renderHistory(filter='All'){
   const list=document.getElementById('historyList');
