@@ -43,6 +43,7 @@ body{
   border:none;border-radius:10px;
   display:flex;align-items:center;justify-content:center;
   gap:10px;background:white;color:black;font-weight:500;
+  cursor:pointer;
 }
 
 .app{display:none;height:100vh;display:flex}
@@ -88,21 +89,17 @@ body{
   text-align:center;
 }
 
-.pay-btn{
-  padding:12px;width:100%;
-  border:none;border-radius:10px;
-  background:linear-gradient(135deg,#3b82f6,#22c55e);
-  color:white;
-}
-
 .page{display:none}
 .page.active{display:block}
 
 .qr{
-  width:140px;background:white;padding:8px;border-radius:10px;
+  width:150px;
+  border-radius:10px;
+  background:white;
+  padding:8px;
 }
 
-/* PROFILE BOXES */
+/* PROFILE */
 .profile-grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
@@ -116,13 +113,13 @@ body{
   background:rgba(255,255,255,0.06);
   border:1px solid rgba(255,255,255,0.1);
 }
+
 .profile-box input{
   width:100%;
   background:transparent;
   border:none;
   color:white;
   outline:none;
-  font-size:14px;
 }
 </style>
 </head>
@@ -171,19 +168,31 @@ body{
 <div id="payment" class="page">
   <h2>Make a Payment</h2>
   <div class="cards">
-    <div class="card"><h3>₹10</h3><button class="pay-btn" onclick="pay(10)">Pay</button></div>
-    <div class="card"><h3>₹25</h3><button class="pay-btn" onclick="pay(25)">Pay</button></div>
-    <div class="card"><h3>₹50</h3><button class="pay-btn" onclick="pay(50)">Pay</button></div>
+    <div class="card"><h3>₹10</h3><button onclick="pay('https://rzp.io/rzp/9ixGnnK')" class="login-btn">Pay</button></div>
+    <div class="card"><h3>₹25</h3><button onclick="pay('https://rzp.io/rzp/pqDtb3dH')" class="login-btn">Pay</button></div>
+    <div class="card"><h3>₹50</h3><button onclick="pay('https://rzp.io/rzp/mKBH5wy')" class="login-btn">Pay</button></div>
   </div>
 </div>
 
 <!-- ✅ FIXED QR -->
 <div id="qr" class="page">
   <h2>Scan & Pay</h2>
+
   <div class="cards">
-    <div class="card"><h3>₹10</h3><img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://rzp.io/rzp/9ixGnnK"></div>
-    <div class="card"><h3>₹25</h3><img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://rzp.io/rzp/pqDtb3dH"></div>
-    <div class="card"><h3>₹50</h3><img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://rzp.io/rzp/mKBH5wy"></div>
+    <div class="card">
+      <h3>₹10</h3>
+      <img class="qr" src="https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=https://rzp.io/rzp/9ixGnnK">
+    </div>
+
+    <div class="card">
+      <h3>₹25</h3>
+      <img class="qr" src="https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=https://rzp.io/rzp/pqDtb3dH">
+    </div>
+
+    <div class="card">
+      <h3>₹50</h3>
+      <img class="qr" src="https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=https://rzp.io/rzp/mKBH5wy">
+    </div>
   </div>
 </div>
 
@@ -192,7 +201,6 @@ body{
   <div id="historyList"></div>
 </div>
 
-<!-- ✅ PROFILE INLINE EDIT -->
 <div id="profile" class="page">
   <h2>User Profile</h2>
 
@@ -228,28 +236,33 @@ function showPage(page,btn){
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
 }
+
+function pay(url){
+  window.location.href=url;
+}
 </script>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-const app=initializeApp({
-  apiKey:"AIzaSy...",
-  authDomain:"smartpayplug.firebaseapp.com",
-  projectId:"smartpayplug"
-});
+const firebaseConfig = {
+  apiKey: "AIzaSyCn074Y2qun8KPMpmtzOZaUrJTe2CMAHP8",
+  authDomain: "smartpayplug.firebaseapp.com",
+  projectId: "smartpayplug"
+};
 
-const auth=getAuth(app);
-const db=getFirestore(app);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-window.loginWithGoogle=async()=>{
-  const provider=new GoogleAuthProvider();
+window.loginWithGoogle = async ()=>{
+  const provider = new GoogleAuthProvider();
   await signInWithPopup(auth,provider);
 };
 
-window.loginWithEmail=async()=>{
+window.loginWithEmail = async ()=>{
   const emailValue=email.value;
   const passwordValue=password.value;
 
@@ -260,18 +273,13 @@ window.loginWithEmail=async()=>{
   }
 };
 
-window.saveProfile=async()=>{
+window.saveProfile = async ()=>{
   const user=auth.currentUser;
-
   await setDoc(doc(db,"users",user.uid),{
     name:nameInput.value,
     phone:phoneInput.value,
     email:user.email
   });
-};
-
-window.pay=function(amount){
-  window.location.href="https://rzp.io/rzp/9ixGnnK";
 };
 
 onAuthStateChanged(auth,(user)=>{
@@ -291,7 +299,7 @@ onAuthStateChanged(auth,(user)=>{
   }
 });
 
-window.logout=()=>signOut(auth);
+window.logout = ()=>signOut(auth);
 </script>
 
 </body>
