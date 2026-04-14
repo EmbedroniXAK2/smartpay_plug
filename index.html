@@ -76,7 +76,6 @@ body{
 .main{flex:1;padding:25px}
 
 .header{
-  display:flex;justify-content:space-between;
   padding:15px;border-radius:12px;
   background:rgba(255,255,255,0.05);
   border:1px solid rgba(255,255,255,0.1);
@@ -145,7 +144,6 @@ body{
   <h2>Control Panel</h2>
 </div>
 
-<!-- DASHBOARD -->
 <div id="dashboard" class="page active">
   <h2>Dashboard</h2>
   <p id="userInfo"></p>
@@ -153,28 +151,11 @@ body{
 
 <!-- PAYMENT -->
 <div id="payment" class="page">
-  <h2 style="margin-bottom:20px;">Make a Payment</h2>
-
+  <h2>Make a Payment</h2>
   <div class="cards">
-
-    <div class="card">
-      <h3>₹10</h3>
-      <p style="font-size:13px;color:#94a3b8;">Quick payment</p>
-      <button class="pay-btn" onclick="pay(10)">Pay ₹10</button>
-    </div>
-
-    <div class="card">
-      <h3>₹25</h3>
-      <p style="font-size:13px;color:#94a3b8;">Standard usage</p>
-      <button class="pay-btn" onclick="pay(25)">Pay ₹25</button>
-    </div>
-
-    <div class="card">
-      <h3>₹50</h3>
-      <p style="font-size:13px;color:#94a3b8;">Premium access</p>
-      <button class="pay-btn" onclick="pay(50)">Pay ₹50</button>
-    </div>
-
+    <div class="card"><h3>₹10</h3><button class="pay-btn" onclick="pay(10)">Pay ₹10</button></div>
+    <div class="card"><h3>₹25</h3><button class="pay-btn" onclick="pay(25)">Pay ₹25</button></div>
+    <div class="card"><h3>₹50</h3><button class="pay-btn" onclick="pay(50)">Pay ₹50</button></div>
   </div>
 </div>
 
@@ -220,9 +201,12 @@ import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signI
 import { getFirestore, doc, setDoc, getDoc, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIza...",
-  authDomain: "...",
+  apiKey: "AIzaSyCn074Y2qun8KPMpmtzOZaUrJTe2CMAHP8",
+  authDomain: "smartpayplug.firebaseapp.com",
   projectId: "smartpayplug",
+  storageBucket: "smartpayplug.firebasestorage.app",
+  messagingSenderId: "4206063973",
+  appId: "1:4206063973:web:198f4ce9b0afbf1955318c"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -240,8 +224,12 @@ window.loginWithEmail = async ()=>{
 
   try{
     await signInWithEmailAndPassword(auth,email,password);
-  }catch{
-    await createUserWithEmailAndPassword(auth,email,password);
+  }catch(error){
+    if(error.code === "auth/user-not-found"){
+      await createUserWithEmailAndPassword(auth,email,password);
+    }else{
+      alert(error.message);
+    }
   }
 };
 
