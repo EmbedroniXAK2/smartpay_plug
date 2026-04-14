@@ -13,7 +13,6 @@ body{
   color:#e2e8f0;
 }
 
-/* LOGIN */
 .login-page{
   position:fixed;width:100%;height:100vh;
   display:flex;justify-content:center;align-items:center;
@@ -39,7 +38,6 @@ body{
   color:white;cursor:pointer;
 }
 
-/* APP */
 .app{display:none;height:100vh;display:flex}
 
 .sidebar{
@@ -148,13 +146,11 @@ body{
 
 <div class="header"><h2>Control Panel</h2></div>
 
-<!-- DASHBOARD -->
 <div id="dashboard" class="page active">
   <h2>Dashboard</h2>
   <p id="userInfo"></p>
 </div>
 
-<!-- PAYMENT -->
 <div id="payment" class="page">
   <h2>Make a Payment</h2>
   <div class="cards">
@@ -164,7 +160,6 @@ body{
   </div>
 </div>
 
-<!-- QR -->
 <div id="qr" class="page">
   <h2>Scan & Pay</h2>
   <div class="cards">
@@ -174,13 +169,11 @@ body{
   </div>
 </div>
 
-<!-- HISTORY -->
 <div id="history" class="page">
   <h2>Payment History</h2>
   <div id="historyList"></div>
 </div>
 
-<!-- PROFILE -->
 <div id="profile" class="page">
   <h2>User Profile</h2>
 
@@ -264,12 +257,23 @@ window.savePayment=async(amount)=>{
   });
 };
 
-function pay(amount){
+window.pay=function(amount){
+  const user=auth.currentUser;
+
+  if(!user){
+    alert("Please login first");
+    return;
+  }
+
   savePayment(amount);
-  if(amount==10) window.open("https://rzp.io/rzp/9ixGnnK");
-  if(amount==25) window.open("https://rzp.io/rzp/pqDtb3dH");
-  if(amount==50) window.open("https://rzp.io/rzp/mKBH5wy");
-}
+
+  let url="";
+  if(amount==10) url="https://rzp.io/rzp/9ixGnnK";
+  if(amount==25) url="https://rzp.io/rzp/pqDtb3dH";
+  if(amount==50) url="https://rzp.io/rzp/mKBH5wy";
+
+  window.location.href=url;
+};
 
 async function loadHistory(user){
   const snap=await getDocs(collection(db,"users",user.uid,"payments"));
