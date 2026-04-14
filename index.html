@@ -13,7 +13,6 @@ body{
   color:#e2e8f0;
 }
 
-/* LOGIN */
 .login-page{
   position:fixed;width:100%;height:100vh;
   display:flex;justify-content:center;align-items:center;
@@ -44,12 +43,8 @@ body{
   border:none;border-radius:10px;
   display:flex;align-items:center;justify-content:center;
   gap:10px;background:white;color:black;font-weight:500;
-  cursor:pointer;
 }
 
-.google-btn img{width:20px}
-
-/* APP */
 .app{display:none;height:100vh;display:flex}
 
 .sidebar{
@@ -121,6 +116,14 @@ body{
   background:rgba(255,255,255,0.06);
   border:1px solid rgba(255,255,255,0.1);
 }
+.profile-box input{
+  width:100%;
+  background:transparent;
+  border:none;
+  color:white;
+  outline:none;
+  font-size:14px;
+}
 </style>
 </head>
 
@@ -137,7 +140,7 @@ body{
     <button onclick="loginWithEmail()" class="login-btn">Login</button>
 
     <button onclick="loginWithGoogle()" class="google-btn">
-      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg">
+      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20">
       Sign in with Google
     </button>
   </div>
@@ -174,8 +177,14 @@ body{
   </div>
 </div>
 
+<!-- ✅ FIXED QR -->
 <div id="qr" class="page">
   <h2>Scan & Pay</h2>
+  <div class="cards">
+    <div class="card"><h3>₹10</h3><img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://rzp.io/rzp/9ixGnnK"></div>
+    <div class="card"><h3>₹25</h3><img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://rzp.io/rzp/pqDtb3dH"></div>
+    <div class="card"><h3>₹50</h3><img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://rzp.io/rzp/mKBH5wy"></div>
+  </div>
 </div>
 
 <div id="history" class="page">
@@ -183,26 +192,29 @@ body{
   <div id="historyList"></div>
 </div>
 
-<!-- PROFILE -->
+<!-- ✅ PROFILE INLINE EDIT -->
 <div id="profile" class="page">
   <h2>User Profile</h2>
 
   <div class="profile-grid">
-    <div class="profile-box"><small>Name</small><br><b id="nameDisplay"></b></div>
-    <div class="profile-box"><small>Phone</small><br><b id="phoneDisplay"></b></div>
-    <div class="profile-box"><small>Email</small><br><b id="emailDisplayText"></b></div>
+    <div class="profile-box">
+      <small>Name</small>
+      <input id="nameInput">
+    </div>
+
+    <div class="profile-box">
+      <small>Phone</small>
+      <input id="phoneInput">
+    </div>
+
+    <div class="profile-box">
+      <small>Email</small>
+      <input id="emailDisplayText" disabled>
+    </div>
   </div>
 
   <br>
-
-  <button onclick="enableEdit()" class="login-btn">Edit</button>
-
-  <div id="editSection" style="display:none;">
-    <input id="nameInput" class="login-input">
-    <input id="phoneInput" class="login-input">
-    <button onclick="saveProfile()" class="login-btn">Save Changes</button>
-  </div>
-
+  <button onclick="saveProfile()" class="login-btn">Save Changes</button>
   <button onclick="logout()" class="login-btn" style="background:red;">Logout</button>
 </div>
 
@@ -216,10 +228,6 @@ function showPage(page,btn){
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
 }
-
-function enableEdit(){
-  document.getElementById("editSection").style.display="block";
-}
 </script>
 
 <script type="module">
@@ -228,7 +236,7 @@ import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPasswor
 import { getFirestore, doc, setDoc, getDoc, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const app=initializeApp({
-  apiKey:"AIzaSyCn074Y2qun8KPMpmtzOZaUrJTe2CMAHP8",
+  apiKey:"AIzaSy...",
   authDomain:"smartpayplug.firebaseapp.com",
   projectId:"smartpayplug"
 });
@@ -236,13 +244,11 @@ const app=initializeApp({
 const auth=getAuth(app);
 const db=getFirestore(app);
 
-/* GOOGLE LOGIN */
 window.loginWithGoogle=async()=>{
   const provider=new GoogleAuthProvider();
   await signInWithPopup(auth,provider);
 };
 
-/* EMAIL LOGIN */
 window.loginWithEmail=async()=>{
   const emailValue=email.value;
   const passwordValue=password.value;
@@ -262,23 +268,10 @@ window.saveProfile=async()=>{
     phone:phoneInput.value,
     email:user.email
   });
-
-  nameDisplay.innerText=nameInput.value;
-  phoneDisplay.innerText=phoneInput.value;
-
-  editSection.style.display="none";
 };
 
 window.pay=function(amount){
-  savePayment(amount);
   window.location.href="https://rzp.io/rzp/9ixGnnK";
-};
-
-window.savePayment=async(amount)=>{
-  const user=auth.currentUser;
-  await addDoc(collection(db,"users",user.uid,"payments"),{
-    amount,time:new Date().toLocaleString()
-  });
 };
 
 onAuthStateChanged(auth,(user)=>{
@@ -286,7 +279,15 @@ onAuthStateChanged(auth,(user)=>{
     document.querySelector(".app").style.display="flex";
     loginPage.style.display="none";
     userInfo.innerText=user.email;
-    emailDisplayText.innerText=user.email;
+    emailDisplayText.value=user.email;
+
+    getDoc(doc(db,"users",user.uid)).then(snap=>{
+      if(snap.exists()){
+        const d=snap.data();
+        nameInput.value=d.name||"";
+        phoneInput.value=d.phone||"";
+      }
+    });
   }
 });
 
