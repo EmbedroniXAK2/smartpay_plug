@@ -101,6 +101,14 @@ body{
   color:white;cursor:pointer;
 }
 
+.qr{
+  width:140px;
+  margin-top:10px;
+  background:white;
+  padding:8px;
+  border-radius:10px;
+}
+
 .page{display:none}
 .page.active{display:block}
 </style>
@@ -134,16 +142,16 @@ body{
   <div class="logo">⚡ SmartPay</div>
   <button class="nav-btn active" onclick="showPage('dashboard',this)">Dashboard</button>
   <button class="nav-btn" onclick="showPage('payment',this)">Payment</button>
+  <button class="nav-btn" onclick="showPage('qr',this)">QR</button>
   <button class="nav-btn" onclick="showPage('history',this)">History</button>
   <button class="nav-btn" onclick="showPage('profile',this)">Profile</button>
 </div>
 
 <div class="main">
 
-<div class="header">
-  <h2>Control Panel</h2>
-</div>
+<div class="header"><h2>Control Panel</h2></div>
 
+<!-- DASHBOARD -->
 <div id="dashboard" class="page active">
   <h2>Dashboard</h2>
   <p id="userInfo"></p>
@@ -159,6 +167,16 @@ body{
   </div>
 </div>
 
+<!-- QR -->
+<div id="qr" class="page">
+  <h2>Scan & Pay</h2>
+  <div class="cards">
+    <div class="card"><h3>₹10</h3><img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://rzp.io/rzp/9ixGnnK"></div>
+    <div class="card"><h3>₹25</h3><img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://rzp.io/rzp/pqDtb3dH"></div>
+    <div class="card"><h3>₹50</h3><img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://rzp.io/rzp/mKBH5wy"></div>
+  </div>
+</div>
+
 <!-- HISTORY -->
 <div id="history" class="page">
   <h2>Payment History</h2>
@@ -168,12 +186,23 @@ body{
 <!-- PROFILE -->
 <div id="profile" class="page">
   <h2>User Profile</h2>
-  <input id="nameInput" class="login-input" placeholder="Name">
-  <input id="phoneInput" class="login-input" placeholder="Phone">
-  <input id="locationInput" class="login-input" placeholder="Location">
-  <input id="emailDisplay" class="login-input" disabled>
-  <button class="login-btn" onclick="saveProfile()">Save</button>
+
+  <p><b>Name:</b> <span id="nameDisplay"></span></p>
+  <p><b>Phone:</b> <span id="phoneDisplay"></span></p>
+  <p><b>Location:</b> <span id="locationDisplay"></span></p>
+  <p><b>Email:</b> <span id="emailDisplayText"></span></p>
+
+  <br>
+
+  <button class="login-btn" onclick="enableEdit()">Edit Profile</button>
   <button class="login-btn" onclick="logout()" style="margin-top:10px;background:red;">Logout</button>
+
+  <div id="editSection" style="display:none;margin-top:15px;">
+    <input id="nameInput" class="login-input">
+    <input id="phoneInput" class="login-input">
+    <input id="locationInput" class="login-input">
+    <button class="login-btn" onclick="saveProfile()">Save Changes</button>
+  </div>
 </div>
 
 </div>
@@ -192,6 +221,10 @@ function pay(amount){
   if(amount==10) window.open("https://rzp.io/rzp/9ixGnnK");
   if(amount==25) window.open("https://rzp.io/rzp/pqDtb3dH");
   if(amount==50) window.open("https://rzp.io/rzp/mKBH5wy");
+}
+
+function enableEdit(){
+  document.getElementById("editSection").style.display="block";
 }
 </script>
 
@@ -219,24 +252,22 @@ window.loginWithGoogle = async ()=>{
 };
 
 window.loginWithEmail = async ()=>{
-  const email=document.getElementById("email").value;
-  const password=document.getElementById("password").value;
+  const email=email.value;
+  const password=password.value;
 
   try{
     await signInWithEmailAndPassword(auth,email,password);
   }catch(error){
-    if(error.code === "auth/user-not-found"){
+    if(error.code==="auth/user-not-found"){
       await createUserWithEmailAndPassword(auth,email,password);
-    }else{
-      alert(error.message);
-    }
+    }else alert(error.message);
   }
 };
 
 window.logout = ()=>signOut(auth);
 
 window.saveProfile = async ()=>{
-  const user = auth.currentUser;
+  const user=auth.currentUser;
   await setDoc(doc(db,"users",user.uid),{
     name:nameInput.value,
     phone:phoneInput.value,
@@ -246,7 +277,7 @@ window.saveProfile = async ()=>{
 };
 
 window.savePayment = async (amount)=>{
-  const user = auth.currentUser;
+  const user=auth.currentUser;
   await addDoc(collection(db,"users",user.uid,"payments"),{
     amount,
     time:new Date().toLocaleString()
@@ -254,12 +285,30 @@ window.savePayment = async (amount)=>{
 };
 
 async function loadHistory(user){
-  const snap = await getDocs(collection(db,"users",user.uid,"payments"));
+  const snap=await getDocs(collection(db,"users",user.uid,"payments"));
   historyList.innerHTML="";
   snap.forEach(doc=>{
     const d=doc.data();
-    historyList.innerHTML += `<p>₹${d.amount} - ${d.time}</p>`;
+    historyList.innerHTML+=`
+      <div style="background:rgba(255,255,255,0.04);padding:15px;margin-bottom:10px;border-radius:10px;">
+        ₹${d.amount} - ${d.time}
+      </div>`;
   });
+}
+
+async function loadProfile(user){
+  const snap=await getDoc(doc(db,"users",user.uid));
+  if(snap.exists()){
+    const d=snap.data();
+    nameDisplay.innerText=d.name||"-";
+    phoneDisplay.innerText=d.phone||"-";
+    locationDisplay.innerText=d.location||"-";
+
+    nameInput.value=d.name||"";
+    phoneInput.value=d.phone||"";
+    locationInput.value=d.location||"";
+  }
+  emailDisplayText.innerText=user.email;
 }
 
 onAuthStateChanged(auth,(user)=>{
@@ -268,6 +317,7 @@ onAuthStateChanged(auth,(user)=>{
     loginPage.style.display="none";
     userInfo.innerText=user.email;
     loadHistory(user);
+    loadProfile(user);
   }
 });
 </script>
