@@ -15,19 +15,13 @@ body{
 
 /* LOGIN */
 .login-page{
-  position:fixed;
-  width:100%;
-  height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
+  position:fixed;width:100%;height:100vh;
+  display:flex;justify-content:center;align-items:center;
   background: radial-gradient(circle at top, #0f172a, #020617);
 }
 
 .login-box{
-  width:350px;
-  padding:30px;
-  border-radius:20px;
+  width:350px;padding:30px;border-radius:20px;
   backdrop-filter:blur(25px);
   background:rgba(255,255,255,0.08);
   border:1px solid rgba(255,255,255,0.15);
@@ -37,47 +31,26 @@ body{
 .login-box h2{color:#60a5fa;margin-bottom:20px}
 
 .login-input{
-  width:100%;
-  padding:12px;
-  margin:10px 0;
-  border-radius:10px;
-  border:1px solid rgba(255,255,255,0.1);
-  background:rgba(255,255,255,0.08);
-  color:white;
+  width:100%;padding:12px;margin:10px 0;
+  border-radius:10px;border:1px solid rgba(255,255,255,0.1);
+  background:rgba(255,255,255,0.08);color:white;
 }
 
 .login-btn{
-  width:100%;
-  padding:12px;
-  border:none;
-  border-radius:10px;
+  width:100%;padding:12px;border:none;border-radius:10px;
   background:linear-gradient(135deg,#2563eb,#22c55e);
-  color:white;
-  cursor:pointer;
+  color:white;cursor:pointer;
 }
 
-/* 🔥 GOOGLE BUTTON */
+/* GOOGLE BUTTON */
 .google-btn{
-  width:100%;
-  padding:12px;
-  margin-top:10px;
-  border:none;
-  border-radius:10px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:10px;
-  cursor:pointer;
-
-  background:white;
-  color:#1f2937;
-  font-weight:500;
+  width:100%;padding:12px;margin-top:10px;border:none;
+  border-radius:10px;display:flex;align-items:center;
+  justify-content:center;gap:10px;
+  background:white;color:#1f2937;font-weight:500;
 }
 
-.google-icon{
-  width:20px;
-  height:20px;
-}
+.google-icon{width:20px;height:20px}
 
 .divider{margin:15px 0;color:#94a3b8}
 
@@ -85,8 +58,7 @@ body{
 .app{display:none;height:100vh}
 
 .sidebar{
-  width:250px;
-  background:rgba(255,255,255,0.05);
+  width:250px;background:rgba(255,255,255,0.05);
   backdrop-filter:blur(20px);
   border-right:1px solid rgba(255,255,255,0.1);
   padding:20px;
@@ -95,14 +67,9 @@ body{
 .logo{font-size:22px;color:#60a5fa;margin-bottom:30px}
 
 .nav-btn{
-  width:100%;
-  padding:12px;
-  margin-bottom:10px;
-  border:none;
-  border-radius:10px;
-  background:transparent;
-  color:#94a3b8;
-  cursor:pointer;
+  width:100%;padding:12px;margin-bottom:10px;border:none;
+  border-radius:10px;background:transparent;
+  color:#94a3b8;cursor:pointer;
 }
 
 .nav-btn:hover,.nav-btn.active{
@@ -113,20 +80,16 @@ body{
 .main{flex:1;padding:25px}
 
 .header{
-  display:flex;
-  justify-content:space-between;
-  padding:15px;
-  border-radius:12px;
+  display:flex;justify-content:space-between;
+  padding:15px;border-radius:12px;
   background:rgba(255,255,255,0.05);
   border:1px solid rgba(255,255,255,0.1);
   margin-bottom:20px;
 }
 
 .badge{
-  background:#22c55e;
-  padding:5px 12px;
-  border-radius:20px;
-  color:black;
+  background:#22c55e;padding:5px 12px;
+  border-radius:20px;color:black;
 }
 
 .cards{
@@ -136,33 +99,23 @@ body{
 }
 
 .card{
-  padding:20px;
-  border-radius:15px;
+  padding:20px;border-radius:15px;
   background:rgba(15,23,42,0.8);
   border:1px solid rgba(59,130,246,0.2);
   text-align:center;
 }
 
 .pay-btn{
-  padding:12px;
-  width:100%;
-  border:none;
-  border-radius:10px;
+  padding:12px;width:100%;border:none;border-radius:10px;
   background:linear-gradient(135deg,#3b82f6,#22c55e);
-  color:white;
-  cursor:pointer;
+  color:white;cursor:pointer;
 }
 
-.pay-btn:hover{
-  transform:scale(1.02);
-}
+.pay-btn:hover{transform:scale(1.02)}
 
 .qr{
-  width:140px;
-  margin-top:10px;
-  background:white;
-  padding:8px;
-  border-radius:10px;
+  width:140px;margin-top:10px;
+  background:white;padding:8px;border-radius:10px;
 }
 
 .page{display:none}
@@ -172,6 +125,7 @@ body{
 
 <body>
 
+<!-- LOGIN -->
 <div id="loginPage" class="login-page">
   <div class="login-box">
     <h2>⚡ SmartPay</h2>
@@ -190,6 +144,7 @@ body{
   </div>
 </div>
 
+<!-- APP -->
 <div class="app">
 
 <div class="sidebar">
@@ -213,15 +168,40 @@ body{
   <p id="userInfo"></p>
 </div>
 
+<!-- 🔥 PROFESSIONAL PROFILE -->
 <div id="profile" class="page">
-  <h2>Profile</h2><br>
-  <input id="nameInput" class="login-input">
-  <input id="phoneInput" class="login-input">
-  <input id="emailDisplay" class="login-input" disabled>
-  <button class="login-btn" onclick="saveProfile()">Save</button>
-  <button class="login-btn" onclick="logout()" style="margin-top:10px;background:#ef4444;">Logout</button>
+  <h2 style="margin-bottom:20px;">User Profile</h2>
+
+  <div style="max-width:600px;background:rgba(255,255,255,0.04);
+  padding:25px;border-radius:15px;border:1px solid rgba(255,255,255,0.1);">
+
+    <label style="font-size:13px;color:#94a3b8;">Full Name</label>
+    <input id="nameInput" class="login-input">
+
+    <label style="font-size:13px;color:#94a3b8;">Phone Number</label>
+    <input id="phoneInput" class="login-input">
+
+    <label style="font-size:13px;color:#94a3b8;">Email Address</label>
+    <input id="emailDisplay" class="login-input" disabled>
+
+    <label style="font-size:13px;color:#94a3b8;">Location</label>
+    <input id="locationInput" class="login-input">
+
+    <label style="font-size:13px;color:#94a3b8;">Account Type</label>
+    <input class="login-input" value="Standard User" disabled>
+
+    <button class="login-btn" onclick="saveProfile()" style="margin-top:10px;">
+      Save Changes
+    </button>
+
+    <button class="login-btn" onclick="logout()" 
+    style="margin-top:10px;background:#ef4444;">
+      Logout
+    </button>
+  </div>
 </div>
 
+<!-- QR -->
 <div id="qr" class="page">
   <h2>Scan & Pay</h2><br>
   <div class="cards">
@@ -231,6 +211,7 @@ body{
   </div>
 </div>
 
+<!-- PAYMENT -->
 <div id="payment" class="page">
   <h2>Pay Now</h2><br>
   <div class="cards">
@@ -287,6 +268,7 @@ window.saveProfile = async ()=>{
   await setDoc(doc(db,"users",user.uid),{
     name:document.getElementById("nameInput").value,
     phone:document.getElementById("phoneInput").value,
+    location:document.getElementById("locationInput").value,
     email:user.email,
     updatedAt:serverTimestamp()
   },{merge:true});
@@ -299,6 +281,7 @@ async function loadProfile(user){
     const d=snap.data();
     document.getElementById("nameInput").value=d.name||"";
     document.getElementById("phoneInput").value=d.phone||"";
+    document.getElementById("locationInput").value=d.location||"";
   }
   document.getElementById("emailDisplay").value=user.email;
 }
