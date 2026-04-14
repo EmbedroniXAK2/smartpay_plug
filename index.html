@@ -695,7 +695,7 @@ body::before{
           <div style="color:var(--muted);font-size:12px;margin-bottom:18px;">Best for a quick top-up while on the go</div>
           <button class="btn-pay" onclick="event.stopPropagation();pay('https://rzp.io/rzp/9ixGnnK',10,'Quick Charge')">Pay Now →</button>
         </div>
-        <div class="pay-card" onclick="pay('https://rzp.io/rzp/pqDtb3dH')">
+        <div class="pay-card" onclick="pay('https://rzp.io/rzp/pqDtb3dH',25,'Standard Charge')">
           <div style="position:absolute;top:14px;right:14px;background:var(--accent-grad);color:white;font-size:10px;font-weight:700;padding:3px 10px;border-radius:100px;z-index:1;">POPULAR</div>
           <div class="pay-amount">₹25</div>
           <div class="pay-label">Standard Charge</div>
@@ -920,7 +920,7 @@ function filterTxn(val,btn){
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, doc, setDoc, getDoc, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"; "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig={
   apiKey:"AIzaSyCn074Y2qun8KPMpmtzOZaUrJTe2CMAHP8",
