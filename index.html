@@ -17,7 +17,6 @@ body{
 .login-page{
   position:fixed;width:100%;height:100vh;
   display:flex;justify-content:center;align-items:center;
-  background: radial-gradient(circle at top, #0f172a, #020617);
 }
 
 .login-box{
@@ -40,53 +39,50 @@ body{
   color:white;cursor:pointer;
 }
 
-/* SIDEBAR */
+/* APP */
+.app{display:none;height:100vh;display:flex}
+
 .sidebar{
   width:250px;
   background:rgba(255,255,255,0.05);
-  backdrop-filter:blur(20px);
   border-right:1px solid rgba(255,255,255,0.1);
   padding:20px;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
 }
 
-.menu{display:none}
-
-/* MOBILE MENU */
-.menu-btn{
-  display:none;
+.logo{
   font-size:22px;
+  color:#60a5fa;
+  margin-bottom:30px;
+}
+
+.nav-btn{
+  width:100%;
+  padding:12px;
+  margin-bottom:10px;
+  border:none;
+  border-radius:10px;
+  background:transparent;
+  color:#94a3b8;
   cursor:pointer;
 }
 
-/* PROFILE FOOTER */
-.profile-footer{
-  margin-top:auto;
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:10px;
-  border-top:1px solid rgba(255,255,255,0.1);
+.nav-btn.active,
+.nav-btn:hover{
+  background:linear-gradient(135deg,#2563eb,#22c55e);
+  color:white;
 }
 
-.avatar{
-  width:35px;
-  height:35px;
-  border-radius:50%;
-  background:#22c55e;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:black;
-  font-weight:bold;
+.main{
+  flex:1;
+  padding:25px;
 }
 
-/* APP */
-.app{display:none;height:100vh}
-
-.main{flex:1;padding:25px}
+.header{
+  padding:15px;
+  border-radius:12px;
+  background:rgba(255,255,255,0.05);
+  margin-bottom:20px;
+}
 
 .cards{
   display:grid;
@@ -95,25 +91,28 @@ body{
 }
 
 .card{
-  padding:20px;border-radius:15px;
+  padding:20px;
+  border-radius:15px;
   background:rgba(15,23,42,0.8);
   border:1px solid rgba(59,130,246,0.2);
   text-align:center;
 }
 
 .pay-btn{
-  padding:12px;width:100%;border:none;border-radius:10px;
+  padding:12px;width:100%;
+  border:none;border-radius:10px;
   background:linear-gradient(135deg,#3b82f6,#22c55e);
-  color:white;cursor:pointer;
+  color:white;
 }
 
 .page{display:none}
 .page.active{display:block}
 
-@media(max-width:768px){
-  .sidebar{display:none}
-  .menu{display:block}
-  .menu-btn{display:block}
+.qr{
+  width:140px;
+  background:white;
+  padding:8px;
+  border-radius:10px;
 }
 </style>
 </head>
@@ -125,8 +124,8 @@ body{
   <div class="login-box">
     <h2>⚡ SmartPay</h2>
 
-    <input id="email" type="email" placeholder="Enter Email" class="login-input">
-    <input id="password" type="password" placeholder="Enter Password" class="login-input">
+    <input id="email" class="login-input" placeholder="Email">
+    <input id="password" type="password" class="login-input" placeholder="Password">
 
     <button onclick="loginWithEmail()" class="login-btn">Login</button>
   </div>
@@ -135,37 +134,27 @@ body{
 <!-- APP -->
 <div class="app">
 
-<!-- ☰ MENU BUTTON -->
-<div class="menu-btn" onclick="toggleMenu()">☰</div>
+<div class="sidebar">
+  <div class="logo">⚡ SmartPay</div>
 
-<div class="sidebar" id="sidebar">
-
-  <div>
-    <h2 style="color:#60a5fa;">⚡ SmartPay</h2>
-
-    <button class="nav-btn" onclick="showPage('dashboard',this)">Dashboard</button>
-    <button class="nav-btn" onclick="showPage('payment',this)">Payment</button>
-    <button class="nav-btn" onclick="showPage('qr',this)">QR</button>
-    <button class="nav-btn" onclick="showPage('history',this)">History</button>
-  </div>
-
-  <!-- 👤 PROFILE FOOTER -->
-  <div class="profile-footer" onclick="showPage('profile')">
-    <div class="avatar" id="avatarLetter">U</div>
-    <div>
-      <div style="font-size:14px;">Profile</div>
-    </div>
-  </div>
-
+  <button class="nav-btn active" onclick="showPage('dashboard',this)">Dashboard</button>
+  <button class="nav-btn" onclick="showPage('payment',this)">Payment</button>
+  <button class="nav-btn" onclick="showPage('qr',this)">QR</button>
+  <button class="nav-btn" onclick="showPage('history',this)">History</button>
+  <button class="nav-btn" onclick="showPage('profile',this)">Profile</button>
 </div>
 
 <div class="main">
 
+<div class="header"><h2>Control Panel</h2></div>
+
+<!-- DASHBOARD -->
 <div id="dashboard" class="page active">
   <h2>Dashboard</h2>
   <p id="userInfo"></p>
 </div>
 
+<!-- PAYMENT -->
 <div id="payment" class="page">
   <h2>Make a Payment</h2>
   <div class="cards">
@@ -175,19 +164,29 @@ body{
   </div>
 </div>
 
-<div id="qr" class="page"><h2>QR</h2></div>
+<!-- QR -->
+<div id="qr" class="page">
+  <h2>Scan & Pay</h2>
+  <div class="cards">
+    <div class="card"><img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://rzp.io/rzp/9ixGnnK"></div>
+    <div class="card"><img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://rzp.io/rzp/pqDtb3dH"></div>
+    <div class="card"><img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://rzp.io/rzp/mKBH5wy"></div>
+  </div>
+</div>
 
+<!-- HISTORY -->
 <div id="history" class="page">
-  <h2>History</h2>
+  <h2>Payment History</h2>
   <div id="historyList"></div>
 </div>
 
+<!-- PROFILE -->
 <div id="profile" class="page">
   <h2>User Profile</h2>
 
-  <p>Name: <span id="nameDisplay"></span></p>
-  <p>Phone: <span id="phoneDisplay"></span></p>
-  <p>Email: <span id="emailDisplayText"></span></p>
+  <p><b>Name:</b> <span id="nameDisplay"></span></p>
+  <p><b>Phone:</b> <span id="phoneDisplay"></span></p>
+  <p><b>Email:</b> <span id="emailDisplayText"></span></p>
 
   <button onclick="enableEdit()" class="login-btn">Edit</button>
 
@@ -204,14 +203,12 @@ body{
 </div>
 
 <script>
-function toggleMenu(){
-  const sidebar=document.getElementById("sidebar");
-  sidebar.style.display = sidebar.style.display==="block"?"none":"block";
-}
-
-function showPage(page){
+function showPage(page,btn){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById(page).classList.add('active');
+
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
 }
 
 function enableEdit(){
@@ -222,7 +219,7 @@ function enableEdit(){
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, doc, setDoc, getDoc, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const app=initializeApp({
   apiKey:"AIzaSyCn074Y2qun8KPMpmtzOZaUrJTe2CMAHP8",
@@ -234,8 +231,8 @@ const auth=getAuth(app);
 const db=getFirestore(app);
 
 window.loginWithEmail=async()=>{
-  const emailValue=email.value;
-  const passwordValue=password.value;
+  const emailValue=document.getElementById("email").value;
+  const passwordValue=document.getElementById("password").value;
 
   try{
     await signInWithEmailAndPassword(auth,emailValue,passwordValue);
@@ -253,15 +250,38 @@ window.saveProfile=async()=>{
     email:user.email
   });
 
-  // 🔥 UPDATE UI INSTANTLY
   nameDisplay.innerText=nameInput.value;
   phoneDisplay.innerText=phoneInput.value;
 
   document.getElementById("editSection").style.display="none";
-
-  // avatar letter update
-  avatarLetter.innerText=nameInput.value.charAt(0).toUpperCase();
 };
+
+window.savePayment=async(amount)=>{
+  const user=auth.currentUser;
+  await addDoc(collection(db,"users",user.uid,"payments"),{
+    amount,
+    time:new Date().toLocaleString()
+  });
+};
+
+function pay(amount){
+  savePayment(amount);
+  if(amount==10) window.open("https://rzp.io/rzp/9ixGnnK");
+  if(amount==25) window.open("https://rzp.io/rzp/pqDtb3dH");
+  if(amount==50) window.open("https://rzp.io/rzp/mKBH5wy");
+}
+
+async function loadHistory(user){
+  const snap=await getDocs(collection(db,"users",user.uid,"payments"));
+  historyList.innerHTML="";
+  snap.forEach(doc=>{
+    const d=doc.data();
+    historyList.innerHTML+=`
+    <div style="background:rgba(255,255,255,0.05);padding:12px;margin:8px;border-radius:10px;">
+      ₹${d.amount} - ${d.time}
+    </div>`;
+  });
+}
 
 async function loadProfile(user){
   const snap=await getDoc(doc(db,"users",user.uid));
@@ -269,10 +289,9 @@ async function loadProfile(user){
     const d=snap.data();
     nameDisplay.innerText=d.name||"-";
     phoneDisplay.innerText=d.phone||"-";
+
     nameInput.value=d.name||"";
     phoneInput.value=d.phone||"";
-
-    avatarLetter.innerText=(d.name||"U").charAt(0).toUpperCase();
   }
   emailDisplayText.innerText=user.email;
 }
@@ -285,6 +304,7 @@ onAuthStateChanged(auth,(user)=>{
     loginPage.style.display="none";
     userInfo.innerText=user.email;
     loadProfile(user);
+    loadHistory(user);
   }
 });
 </script>
