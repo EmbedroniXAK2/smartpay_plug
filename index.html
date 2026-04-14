@@ -1027,6 +1027,8 @@ onAuthStateChanged(auth,(user)=>{
         }
       }
     });
+  // ✅ ADD THIS LINE (VERY IMPORTANT)
+    loadRealData(user);
   }
 });
 
