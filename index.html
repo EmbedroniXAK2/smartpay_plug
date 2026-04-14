@@ -40,47 +40,53 @@ body{
   color:white;cursor:pointer;
 }
 
-.google-btn{
-  width:100%;padding:12px;margin-top:10px;border:none;
-  border-radius:10px;display:flex;align-items:center;
-  justify-content:center;gap:10px;
-  background:white;color:#1f2937;font-weight:500;
+/* SIDEBAR */
+.sidebar{
+  width:250px;
+  background:rgba(255,255,255,0.05);
+  backdrop-filter:blur(20px);
+  border-right:1px solid rgba(255,255,255,0.1);
+  padding:20px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
 }
 
-.google-icon{width:20px}
-.divider{margin:15px 0;color:#94a3b8}
+.menu{display:none}
+
+/* MOBILE MENU */
+.menu-btn{
+  display:none;
+  font-size:22px;
+  cursor:pointer;
+}
+
+/* PROFILE FOOTER */
+.profile-footer{
+  margin-top:auto;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px;
+  border-top:1px solid rgba(255,255,255,0.1);
+}
+
+.avatar{
+  width:35px;
+  height:35px;
+  border-radius:50%;
+  background:#22c55e;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:black;
+  font-weight:bold;
+}
 
 /* APP */
 .app{display:none;height:100vh}
 
-.sidebar{
-  width:250px;background:rgba(255,255,255,0.05);
-  backdrop-filter:blur(20px);
-  border-right:1px solid rgba(255,255,255,0.1);
-  padding:20px;
-}
-
-.logo{font-size:22px;color:#60a5fa;margin-bottom:30px}
-
-.nav-btn{
-  width:100%;padding:12px;margin-bottom:10px;border:none;
-  border-radius:10px;background:transparent;
-  color:#94a3b8;cursor:pointer;
-}
-
-.nav-btn:hover,.nav-btn.active{
-  background:linear-gradient(135deg,#2563eb,#22c55e);
-  color:white;
-}
-
 .main{flex:1;padding:25px}
-
-.header{
-  padding:15px;border-radius:12px;
-  background:rgba(255,255,255,0.05);
-  border:1px solid rgba(255,255,255,0.1);
-  margin-bottom:20px;
-}
 
 .cards{
   display:grid;
@@ -101,16 +107,14 @@ body{
   color:white;cursor:pointer;
 }
 
-.qr{
-  width:140px;
-  margin-top:10px;
-  background:white;
-  padding:8px;
-  border-radius:10px;
-}
-
 .page{display:none}
 .page.active{display:block}
+
+@media(max-width:768px){
+  .sidebar{display:none}
+  .menu{display:block}
+  .menu-btn{display:block}
+}
 </style>
 </head>
 
@@ -125,102 +129,89 @@ body{
     <input id="password" type="password" placeholder="Enter Password" class="login-input">
 
     <button onclick="loginWithEmail()" class="login-btn">Login</button>
-
-    <div class="divider">OR</div>
-
-    <button onclick="loginWithGoogle()" class="google-btn">
-      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="google-icon">
-      Continue with Google
-    </button>
   </div>
 </div>
 
 <!-- APP -->
 <div class="app">
 
-<div class="sidebar">
-  <div class="logo">⚡ SmartPay</div>
-  <button class="nav-btn active" onclick="showPage('dashboard',this)">Dashboard</button>
-  <button class="nav-btn" onclick="showPage('payment',this)">Payment</button>
-  <button class="nav-btn" onclick="showPage('qr',this)">QR</button>
-  <button class="nav-btn" onclick="showPage('history',this)">History</button>
-  <button class="nav-btn" onclick="showPage('profile',this)">Profile</button>
+<!-- ☰ MENU BUTTON -->
+<div class="menu-btn" onclick="toggleMenu()">☰</div>
+
+<div class="sidebar" id="sidebar">
+
+  <div>
+    <h2 style="color:#60a5fa;">⚡ SmartPay</h2>
+
+    <button class="nav-btn" onclick="showPage('dashboard',this)">Dashboard</button>
+    <button class="nav-btn" onclick="showPage('payment',this)">Payment</button>
+    <button class="nav-btn" onclick="showPage('qr',this)">QR</button>
+    <button class="nav-btn" onclick="showPage('history',this)">History</button>
+  </div>
+
+  <!-- 👤 PROFILE FOOTER -->
+  <div class="profile-footer" onclick="showPage('profile')">
+    <div class="avatar" id="avatarLetter">U</div>
+    <div>
+      <div style="font-size:14px;">Profile</div>
+    </div>
+  </div>
+
 </div>
 
 <div class="main">
 
-<div class="header"><h2>Control Panel</h2></div>
-
-<!-- DASHBOARD -->
 <div id="dashboard" class="page active">
   <h2>Dashboard</h2>
   <p id="userInfo"></p>
 </div>
 
-<!-- PAYMENT -->
 <div id="payment" class="page">
   <h2>Make a Payment</h2>
   <div class="cards">
-    <div class="card"><h3>₹10</h3><button class="pay-btn" onclick="pay(10)">Pay ₹10</button></div>
-    <div class="card"><h3>₹25</h3><button class="pay-btn" onclick="pay(25)">Pay ₹25</button></div>
-    <div class="card"><h3>₹50</h3><button class="pay-btn" onclick="pay(50)">Pay ₹50</button></div>
+    <div class="card"><h3>₹10</h3><button class="pay-btn" onclick="pay(10)">Pay</button></div>
+    <div class="card"><h3>₹25</h3><button class="pay-btn" onclick="pay(25)">Pay</button></div>
+    <div class="card"><h3>₹50</h3><button class="pay-btn" onclick="pay(50)">Pay</button></div>
   </div>
 </div>
 
-<!-- QR -->
-<div id="qr" class="page">
-  <h2>Scan & Pay</h2>
-  <div class="cards">
-    <div class="card"><h3>₹10</h3><img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://rzp.io/rzp/9ixGnnK"></div>
-    <div class="card"><h3>₹25</h3><img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://rzp.io/rzp/pqDtb3dH"></div>
-    <div class="card"><h3>₹50</h3><img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://rzp.io/rzp/mKBH5wy"></div>
-  </div>
-</div>
+<div id="qr" class="page"><h2>QR</h2></div>
 
-<!-- HISTORY -->
 <div id="history" class="page">
-  <h2>Payment History</h2>
+  <h2>History</h2>
   <div id="historyList"></div>
 </div>
 
-<!-- PROFILE -->
 <div id="profile" class="page">
   <h2>User Profile</h2>
 
-  <p><b>Name:</b> <span id="nameDisplay"></span></p>
-  <p><b>Phone:</b> <span id="phoneDisplay"></span></p>
-  <p><b>Location:</b> <span id="locationDisplay"></span></p>
-  <p><b>Email:</b> <span id="emailDisplayText"></span></p>
+  <p>Name: <span id="nameDisplay"></span></p>
+  <p>Phone: <span id="phoneDisplay"></span></p>
+  <p>Email: <span id="emailDisplayText"></span></p>
 
-  <br>
+  <button onclick="enableEdit()" class="login-btn">Edit</button>
 
-  <button class="login-btn" onclick="enableEdit()">Edit Profile</button>
-  <button class="login-btn" onclick="logout()" style="margin-top:10px;background:red;">Logout</button>
-
-  <div id="editSection" style="display:none;margin-top:15px;">
+  <div id="editSection" style="display:none;">
     <input id="nameInput" class="login-input">
     <input id="phoneInput" class="login-input">
-    <input id="locationInput" class="login-input">
-    <button class="login-btn" onclick="saveProfile()">Save Changes</button>
+    <button onclick="saveProfile()" class="login-btn">Save Changes</button>
   </div>
+
+  <button onclick="logout()" class="login-btn" style="background:red;">Logout</button>
 </div>
 
 </div>
 </div>
 
 <script>
-function showPage(page,btn){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById(page).classList.add('active');
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
+function toggleMenu(){
+  const sidebar=document.getElementById("sidebar");
+  sidebar.style.display = sidebar.style.display==="block"?"none":"block";
 }
 
-function pay(amount){
-  savePayment(amount);
-  if(amount==10) window.open("https://rzp.io/rzp/9ixGnnK");
-  if(amount==25) window.open("https://rzp.io/rzp/pqDtb3dH");
-  if(amount==50) window.open("https://rzp.io/rzp/mKBH5wy");
+function showPage(page){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(page).classList.add('active');
 }
 
 function enableEdit(){
@@ -230,71 +221,47 @@ function enableEdit(){
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyCn074Y2qun8KPMpmtzOZaUrJTe2CMAHP8",
-  authDomain: "smartpayplug.firebaseapp.com",
-  projectId: "smartpayplug",
-  storageBucket: "smartpayplug.firebasestorage.app",
-  messagingSenderId: "4206063973",
-  appId: "1:4206063973:web:198f4ce9b0afbf1955318c"
-};
+const app=initializeApp({
+  apiKey:"AIzaSyCn074Y2qun8KPMpmtzOZaUrJTe2CMAHP8",
+  authDomain:"smartpayplug.firebaseapp.com",
+  projectId:"smartpayplug"
+});
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+const auth=getAuth(app);
+const db=getFirestore(app);
 
-window.loginWithGoogle = async ()=>{
-  const provider = new GoogleAuthProvider();
-  await signInWithPopup(auth,provider);
-};
-
-window.loginWithEmail = async ()=>{
-  const email=email.value;
-  const password=password.value;
+window.loginWithEmail=async()=>{
+  const emailValue=email.value;
+  const passwordValue=password.value;
 
   try{
-    await signInWithEmailAndPassword(auth,email,password);
-  }catch(error){
-    if(error.code==="auth/user-not-found"){
-      await createUserWithEmailAndPassword(auth,email,password);
-    }else alert(error.message);
+    await signInWithEmailAndPassword(auth,emailValue,passwordValue);
+  }catch{
+    await createUserWithEmailAndPassword(auth,emailValue,passwordValue);
   }
 };
 
-window.logout = ()=>signOut(auth);
-
-window.saveProfile = async ()=>{
+window.saveProfile=async()=>{
   const user=auth.currentUser;
+
   await setDoc(doc(db,"users",user.uid),{
     name:nameInput.value,
     phone:phoneInput.value,
-    location:locationInput.value,
     email:user.email
   });
-};
 
-window.savePayment = async (amount)=>{
-  const user=auth.currentUser;
-  await addDoc(collection(db,"users",user.uid,"payments"),{
-    amount,
-    time:new Date().toLocaleString()
-  });
-};
+  // 🔥 UPDATE UI INSTANTLY
+  nameDisplay.innerText=nameInput.value;
+  phoneDisplay.innerText=phoneInput.value;
 
-async function loadHistory(user){
-  const snap=await getDocs(collection(db,"users",user.uid,"payments"));
-  historyList.innerHTML="";
-  snap.forEach(doc=>{
-    const d=doc.data();
-    historyList.innerHTML+=`
-      <div style="background:rgba(255,255,255,0.04);padding:15px;margin-bottom:10px;border-radius:10px;">
-        ₹${d.amount} - ${d.time}
-      </div>`;
-  });
-}
+  document.getElementById("editSection").style.display="none";
+
+  // avatar letter update
+  avatarLetter.innerText=nameInput.value.charAt(0).toUpperCase();
+};
 
 async function loadProfile(user){
   const snap=await getDoc(doc(db,"users",user.uid));
@@ -302,21 +269,21 @@ async function loadProfile(user){
     const d=snap.data();
     nameDisplay.innerText=d.name||"-";
     phoneDisplay.innerText=d.phone||"-";
-    locationDisplay.innerText=d.location||"-";
-
     nameInput.value=d.name||"";
     phoneInput.value=d.phone||"";
-    locationInput.value=d.location||"";
+
+    avatarLetter.innerText=(d.name||"U").charAt(0).toUpperCase();
   }
   emailDisplayText.innerText=user.email;
 }
+
+window.logout=()=>signOut(auth);
 
 onAuthStateChanged(auth,(user)=>{
   if(user){
     document.querySelector(".app").style.display="flex";
     loginPage.style.display="none";
     userInfo.innerText=user.email;
-    loadHistory(user);
     loadProfile(user);
   }
 });
