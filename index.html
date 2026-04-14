@@ -849,22 +849,15 @@ function showPage(page,btn){
   btn.classList.add('active');
 }
 
-window.pay = async (url, amount, plan)=>{
-  const user = auth.currentUser;
-
-  if(!user){
-    alert("Please login first");
-    return;
+// pay() is called from regular onclick - keep it simple, no Firebase references here
+// Firebase addDoc is handled inside the module script via window._payWithRecord
+function pay(url, amount, plan){
+  if(window._payWithRecord){
+    window._payWithRecord(url, amount, plan);
+  } else {
+    window.open(url,'_blank');
   }
-
-  await addDoc(collection(db,"users",user.uid,"payments"),{
-    amount: amount,
-    plan: plan,
-    time: new Date().toLocaleString()
-  });
-
-  window.location.href = url;
-};
+}
 
 function showToast(msg,isErr){
   const t=document.getElementById('toast');
@@ -876,30 +869,30 @@ function showToast(msg,isErr){
   setTimeout(()=>t.classList.remove('show'),3000);
 }
 
-
+// Real transactions cache (filled by Firestore)
+window._allTxns = [];
 
 function renderHistory(filter='All'){
   const list=document.getElementById('historyList');
-  const filtered=filter==='All'?demoTxns:demoTxns.filter(t=>t.amount===filter);
-  if(!filtered.length){
+  const rows = filter==='All' ? window._allTxns : window._allTxns.filter(t=>String(t.amount)===filter.replace('₹',''));
+  if(!rows.length){
     list.innerHTML='<div class="empty"><span class="emoji">📭</span>No transactions found</div>';
     return;
   }
-  list.innerHTML=filtered.map(t=>`
+  list.innerHTML=rows.map(d=>`
     <div class="txn-row">
-      <div class="txn-icon">${t.icon}</div>
+      <div class="txn-icon">⚡</div>
       <div class="txn-info">
-        <div class="txn-title">${t.plan} · ${t.plug}</div>
-        <div class="txn-date">${t.date}</div>
+        <div class="txn-title">${d.plan||'Payment'}</div>
+        <div class="txn-date">${d.time||'—'}</div>
       </div>
       <div style="text-align:right;">
-        <div class="txn-amt">${t.amount}</div>
-        <div class="txn-status">✓ Success</div>
+        <div class="txn-amt">₹${d.amount}</div>
+        <div class="txn-status">✓ Initiated</div>
       </div>
     </div>
   `).join('');
 }
-
 
 function filterTxn(val,btn){
   document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('on'));
@@ -910,47 +903,6 @@ function filterTxn(val,btn){
 
 <!-- FIREBASE -->
 <script type="module">
-
-// 🔽 ADD HERE (below imports or below db init)
-
-async function loadRealData(user){
-
-  const snap = await getDocs(collection(db,"users",user.uid,"payments"));
-
-  let total = 0;
-  const list = document.getElementById("historyList");
-
-  list.innerHTML = "";
-
-  if(snap.empty){
-    list.innerHTML = '<div class="empty"><span class="emoji">📭</span>No transactions yet</div>';
-  }
-
-  snap.forEach(doc=>{
-    const d = doc.data();
-    total += Number(d.amount);
-
-    list.innerHTML += `
-      <div class="txn-row">
-        <div class="txn-icon">⚡</div>
-        <div class="txn-info">
-          <div class="txn-title">${d.plan}</div>
-          <div class="txn-date">${d.time}</div>
-        </div>
-        <div style="text-align:right;">
-          <div class="txn-amt">₹${d.amount}</div>
-          <div class="txn-status">✓ Initiated</div>
-        </div>
-      </div>
-    `;
-  });
-
-  const revenueBox = document.querySelector('.card-value.grad');
-  if(revenueBox) revenueBox.innerText = "₹" + total;
-}
-
-<script type="module">
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
@@ -964,6 +916,44 @@ const firebaseConfig={
 const app=initializeApp(firebaseConfig);
 const auth=getAuth(app);
 const db=getFirestore(app);
+
+/* ── pay() bridge: called by inline onclick via window.pay() ── */
+window._payWithRecord=async(url,amount,plan)=>{
+  const user=auth.currentUser;
+  try{
+    if(user){
+      await addDoc(collection(db,"users",user.uid,"payments"),{
+        amount:amount,
+        plan:plan,
+        time:new Date().toLocaleString('en-IN')
+      });
+    }
+  }catch(e){ /* non-blocking */ }
+  window.open(url,'_blank');
+};
+
+/* ── Load real payment history from Firestore ── */
+async function loadRealHistory(user){
+  const list=document.getElementById('historyList');
+  list.innerHTML='<div class="empty"><span class="emoji">⏳</span>Loading...</div>';
+  try{
+    const snap=await getDocs(collection(db,"users",user.uid,"payments"));
+    if(snap.empty){
+      window._allTxns=[];
+      list.innerHTML='<div class="empty"><span class="emoji">📭</span>No transactions yet</div>';
+      return;
+    }
+    const rows=[];
+    snap.forEach(docSnap=>{ rows.push(docSnap.data()); });
+    rows.reverse(); // newest first
+    window._allTxns=rows;
+    renderHistory('All');
+    // reset filter chips
+    document.querySelectorAll('.filter-chip').forEach((c,i)=>{c.classList.toggle('on',i===0);});
+  }catch(e){
+    list.innerHTML='<div class="empty"><span class="emoji">⚠️</span>Could not load history</div>';
+  }
+}
 
 window.loginWithGoogle=async()=>{
   try{
@@ -988,8 +978,7 @@ window.saveProfile=async()=>{
     name:document.getElementById('nameInput').value,
     phone:document.getElementById('phoneInput').value,
     email:user.email
-  });
-  // update sidebar + profile avatar
+  },{merge:true});
   const n=document.getElementById('nameInput').value;
   if(n){
     document.getElementById('profileName').textContent=n;
@@ -1028,8 +1017,16 @@ onAuthStateChanged(auth,(user)=>{
         }
       }
     });
-  // ✅ ADD THIS LINE (VERY IMPORTANT)
-    loadRealData(user);
+
+    // Load real history on login
+    loadRealHistory(user);
+
+    // Reload history when user clicks History tab
+    document.querySelectorAll('.nav-btn').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        if(btn.textContent.trim().includes('History')) loadRealHistory(user);
+      });
+    });
   }
 });
 
