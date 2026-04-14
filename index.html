@@ -8,7 +8,6 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI'}
 
-/* 🔥 GLASS BACKGROUND */
 body{
   background: radial-gradient(circle at top, #0f172a, #020617);
   color:#e2e8f0;
@@ -28,7 +27,6 @@ body{
   background:rgba(255,255,255,0.08);
   border:1px solid rgba(255,255,255,0.15);
   text-align:center;
-  box-shadow:0 0 40px rgba(34,197,94,0.25);
 }
 
 .login-box h2{color:#60a5fa;margin-bottom:20px}
@@ -68,7 +66,6 @@ body{
   cursor:pointer;
 }
 
-.google-btn img{width:20px}
 .divider{margin:15px 0;color:#94a3b8}
 
 /* APP */
@@ -108,7 +105,6 @@ body{
   padding:15px;
   border-radius:12px;
   background:rgba(255,255,255,0.05);
-  backdrop-filter:blur(20px);
   border:1px solid rgba(255,255,255,0.1);
   margin-bottom:20px;
 }
@@ -129,9 +125,8 @@ body{
 .card{
   padding:20px;
   border-radius:15px;
-  background:rgba(255,255,255,0.05);
-  backdrop-filter:blur(20px);
-  border:1px solid rgba(255,255,255,0.1);
+  background:rgba(15,23,42,0.8);
+  border:1px solid rgba(59,130,246,0.2);
   text-align:center;
 }
 
@@ -140,16 +135,20 @@ body{
   width:100%;
   border:none;
   border-radius:10px;
-  background:linear-gradient(135deg,#2563eb,#22c55e);
+  background:linear-gradient(135deg,#3b82f6,#22c55e);
   color:white;
   cursor:pointer;
+}
+
+.pay-btn:hover{
+  transform:scale(1.02);
 }
 
 .qr{
   width:140px;
   margin-top:10px;
   background:white;
-  padding:6px;
+  padding:8px;
   border-radius:10px;
 }
 
@@ -160,7 +159,6 @@ body{
 
 <body>
 
-<!-- LOGIN -->
 <div id="loginPage" class="login-page">
   <div class="login-box">
     <h2>⚡ SmartPay</h2>
@@ -179,7 +177,6 @@ body{
   </div>
 </div>
 
-<!-- APP -->
 <div class="app">
 
 <div class="sidebar">
@@ -203,56 +200,24 @@ body{
   <p id="userInfo"></p>
 </div>
 
-<!-- PROFILE -->
 <div id="profile" class="page">
   <h2>Profile</h2><br>
-
-  <div style="max-width:400px;">
-    <label style="font-size:13px;color:#94a3b8;">Full Name</label>
-    <input id="nameInput" class="login-input">
-
-    <label style="font-size:13px;color:#94a3b8;">Phone Number</label>
-    <input id="phoneInput" class="login-input">
-
-    <label style="font-size:13px;color:#94a3b8;">Email</label>
-    <input id="emailDisplay" class="login-input" disabled>
-
-    <button class="login-btn" onclick="saveProfile()">Save Changes</button>
-
-    <button class="login-btn" onclick="logout()" 
-    style="margin-top:10px;background:linear-gradient(135deg,#ef4444,#dc2626);">
-      Logout
-    </button>
-  </div>
+  <input id="nameInput" class="login-input">
+  <input id="phoneInput" class="login-input">
+  <input id="emailDisplay" class="login-input" disabled>
+  <button class="login-btn" onclick="saveProfile()">Save</button>
+  <button class="login-btn" onclick="logout()" style="margin-top:10px;background:#ef4444;">Logout</button>
 </div>
 
-<!-- QR -->
 <div id="qr" class="page">
   <h2>Scan & Pay</h2><br>
   <div class="cards">
-
-    <div class="card"><h3>₹10</h3>
-      <a href="https://rzp.io/rzp/9ixGnnK" target="_blank">
-        <img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://rzp.io/rzp/9ixGnnK">
-      </a>
-    </div>
-
-    <div class="card"><h3>₹25</h3>
-      <a href="https://rzp.io/rzp/pqDtb3dH" target="_blank">
-        <img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://rzp.io/rzp/pqDtb3dH">
-      </a>
-    </div>
-
-    <div class="card"><h3>₹50</h3>
-      <a href="https://rzp.io/rzp/mKBH5wy" target="_blank">
-        <img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://rzp.io/rzp/mKBH5wy">
-      </a>
-    </div>
-
+    <div class="card"><h3>₹10</h3><a href="https://rzp.io/rzp/9ixGnnK" target="_blank"><img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://rzp.io/rzp/9ixGnnK"></a></div>
+    <div class="card"><h3>₹25</h3><a href="https://rzp.io/rzp/pqDtb3dH" target="_blank"><img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://rzp.io/rzp/pqDtb3dH"></a></div>
+    <div class="card"><h3>₹50</h3><a href="https://rzp.io/rzp/mKBH5wy" target="_blank"><img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://rzp.io/rzp/mKBH5wy"></a></div>
   </div>
 </div>
 
-<!-- PAYMENT -->
 <div id="payment" class="page">
   <h2>Pay Now</h2><br>
   <div class="cards">
@@ -284,13 +249,19 @@ function pay(amount){
 }
 </script>
 
-<!-- FIREBASE -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getFirestore, doc, setDoc, serverTimestamp, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-const firebaseConfig = { /* SAME AS YOURS */ };
+const firebaseConfig = {
+  apiKey: "AIzaSyCn074Y2qun8KPMpmtzOZaUrJTe2CMAHP8",
+  authDomain: "smartpayplug.firebaseapp.com",
+  projectId: "smartpayplug",
+  storageBucket: "smartpayplug.firebasestorage.app",
+  messagingSenderId: "4206063973",
+  appId: "1:4206063973:web:198f4ce9b0afbf1955318c"
+};
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -333,10 +304,15 @@ window.loginWithGoogle = async ()=>{
 window.loginWithEmail = async ()=>{
   const email=document.querySelectorAll(".login-input")[0].value;
   const password=document.querySelectorAll(".login-input")[1].value;
+
   try{
     await signInWithEmailAndPassword(auth,email,password);
-  }catch{
-    await createUserWithEmailAndPassword(auth,email,password);
+  }catch(error){
+    if(error.code === "auth/user-not-found"){
+      await createUserWithEmailAndPassword(auth,email,password);
+    }else{
+      alert(error.message);
+    }
   }
 };
 
