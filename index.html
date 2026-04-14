@@ -56,16 +56,27 @@ body{
   cursor:pointer;
 }
 
+/* 🔥 GOOGLE BUTTON */
 .google-btn{
   width:100%;
   padding:12px;
   margin-top:10px;
   border:none;
   border-radius:10px;
-  background:rgba(255,255,255,0.08);
-  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
   cursor:pointer;
-  border:1px solid rgba(255,255,255,0.1);
+
+  background:white;
+  color:#1f2937;
+  font-weight:500;
+}
+
+.google-icon{
+  width:20px;
+  height:20px;
 }
 
 .divider{margin:15px 0;color:#94a3b8}
@@ -173,6 +184,7 @@ body{
     <div class="divider">OR</div>
 
     <button onclick="loginWithGoogle()" class="google-btn">
+      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="google-icon">
       Continue with Google
     </button>
   </div>
