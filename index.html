@@ -7,94 +7,152 @@
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI'}
-body{background:#020617;color:#e2e8f0}
+
+/* 🔥 GLASS BACKGROUND */
+body{
+  background: radial-gradient(circle at top, #0f172a, #020617);
+  color:#e2e8f0;
+}
 
 /* LOGIN */
 .login-page{
   position:fixed;width:100%;height:100vh;
   display:flex;justify-content:center;align-items:center;
-  background:#020617;z-index:999;
 }
+
 .login-box{
-  width:350px;padding:30px;border-radius:20px;
-  backdrop-filter:blur(20px);
-  background:rgba(255,255,255,0.05);
-  border:1px solid rgba(255,255,255,0.1);
+  width:350px;
+  padding:30px;
+  border-radius:20px;
+  backdrop-filter:blur(25px);
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.15);
   text-align:center;
-  box-shadow:0 0 40px rgba(34,197,94,0.2);
+  box-shadow:0 0 40px rgba(34,197,94,0.25);
 }
+
 .login-box h2{color:#60a5fa;margin-bottom:20px}
+
 .login-input{
-  width:100%;padding:12px;margin:10px 0;
-  border-radius:10px;border:none;
-  background:rgba(255,255,255,0.1);
+  width:100%;
+  padding:12px;
+  margin:10px 0;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,0.1);
+  background:rgba(255,255,255,0.08);
   color:white;
 }
+
 .login-btn{
-  width:100%;padding:12px;border:none;border-radius:10px;
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:10px;
   background:linear-gradient(135deg,#2563eb,#22c55e);
-  color:white;cursor:pointer;
+  color:white;
+  cursor:pointer;
 }
+
 .google-btn{
-  width:100%;padding:12px;margin-top:10px;
-  border:none;border-radius:10px;
-  display:flex;align-items:center;justify-content:center;
-  gap:10px;background:rgba(255,255,255,0.1);
-  color:white;cursor:pointer;
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+  border:none;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  background:rgba(255,255,255,0.1);
+  color:white;
+  cursor:pointer;
 }
+
 .google-btn img{width:20px}
 .divider{margin:15px 0;color:#94a3b8}
 
 /* APP */
 .app{display:none;height:100vh}
+
 .sidebar{
-  width:250px;background:rgba(10,10,20,0.9);
-  border-right:1px solid rgba(59,130,246,0.2);
+  width:250px;
+  background:rgba(255,255,255,0.05);
+  backdrop-filter:blur(20px);
+  border-right:1px solid rgba(255,255,255,0.1);
   padding:20px;
 }
+
 .logo{font-size:22px;color:#60a5fa;margin-bottom:30px}
+
 .nav-btn{
-  width:100%;padding:12px;margin-bottom:10px;
-  border:none;border-radius:10px;
-  background:#020617;color:#94a3b8;cursor:pointer;
+  width:100%;
+  padding:12px;
+  margin-bottom:10px;
+  border:none;
+  border-radius:10px;
+  background:transparent;
+  color:#94a3b8;
+  cursor:pointer;
 }
+
 .nav-btn:hover,.nav-btn.active{
   background:linear-gradient(135deg,#2563eb,#22c55e);
   color:white;
 }
+
 .main{flex:1;padding:25px}
+
 .header{
-  display:flex;justify-content:space-between;
-  padding:15px;border-radius:12px;
-  background:#020617;
-  border:1px solid rgba(59,130,246,0.2);
+  display:flex;
+  justify-content:space-between;
+  padding:15px;
+  border-radius:12px;
+  background:rgba(255,255,255,0.05);
+  backdrop-filter:blur(20px);
+  border:1px solid rgba(255,255,255,0.1);
   margin-bottom:20px;
 }
+
 .badge{
-  background:#22c55e;padding:5px 12px;
-  border-radius:20px;color:black;
+  background:#22c55e;
+  padding:5px 12px;
+  border-radius:20px;
+  color:black;
 }
+
 .cards{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
   gap:20px;
 }
+
 .card{
-  padding:20px;border-radius:15px;
-  background:#020617;
-  border:1px solid rgba(59,130,246,0.2);
+  padding:20px;
+  border-radius:15px;
+  background:rgba(255,255,255,0.05);
+  backdrop-filter:blur(20px);
+  border:1px solid rgba(255,255,255,0.1);
   text-align:center;
 }
+
 .pay-btn{
-  padding:12px;width:100%;
-  border:none;border-radius:10px;
+  padding:12px;
+  width:100%;
+  border:none;
+  border-radius:10px;
   background:linear-gradient(135deg,#2563eb,#22c55e);
-  color:white;cursor:pointer;
+  color:white;
+  cursor:pointer;
 }
+
 .qr{
-  width:140px;margin-top:10px;
-  background:white;padding:6px;border-radius:10px;
+  width:140px;
+  margin-top:10px;
+  background:white;
+  padding:6px;
+  border-radius:10px;
 }
+
 .page{display:none}
 .page.active{display:block}
 </style>
@@ -130,6 +188,7 @@ body{background:#020617;color:#e2e8f0}
   <button class="nav-btn" onclick="showPage('qr',this)">QR</button>
   <button class="nav-btn" onclick="showPage('payment',this)">Payment</button>
   <button class="nav-btn" onclick="showPage('session',this)">Session</button>
+  <button class="nav-btn" onclick="showPage('profile',this)">Profile</button>
 </div>
 
 <div class="main">
@@ -144,6 +203,30 @@ body{background:#020617;color:#e2e8f0}
   <p id="userInfo"></p>
 </div>
 
+<!-- PROFILE -->
+<div id="profile" class="page">
+  <h2>Profile</h2><br>
+
+  <div style="max-width:400px;">
+    <label style="font-size:13px;color:#94a3b8;">Full Name</label>
+    <input id="nameInput" class="login-input">
+
+    <label style="font-size:13px;color:#94a3b8;">Phone Number</label>
+    <input id="phoneInput" class="login-input">
+
+    <label style="font-size:13px;color:#94a3b8;">Email</label>
+    <input id="emailDisplay" class="login-input" disabled>
+
+    <button class="login-btn" onclick="saveProfile()">Save Changes</button>
+
+    <button class="login-btn" onclick="logout()" 
+    style="margin-top:10px;background:linear-gradient(135deg,#ef4444,#dc2626);">
+      Logout
+    </button>
+  </div>
+</div>
+
+<!-- QR -->
 <div id="qr" class="page">
   <h2>Scan & Pay</h2><br>
   <div class="cards">
@@ -169,6 +252,7 @@ body{background:#020617;color:#e2e8f0}
   </div>
 </div>
 
+<!-- PAYMENT -->
 <div id="payment" class="page">
   <h2>Pay Now</h2><br>
   <div class="cards">
@@ -192,47 +276,53 @@ function showPage(page,btn){
 }
 
 function pay(amount){
-  let url = "";
-
+  let url="";
   if(amount==10) url="https://rzp.io/rzp/9ixGnnK";
   if(amount==25) url="https://rzp.io/rzp/pqDtb3dH";
   if(amount==50) url="https://rzp.io/rzp/mKBH5wy";
-
-  window.open(url, "_blank");
+  window.open(url,"_blank");
 }
 </script>
 
 <!-- FIREBASE -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { 
-  getAuth, 
-  GoogleAuthProvider, 
-  signInWithPopup, 
-  onAuthStateChanged,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, doc, setDoc, serverTimestamp, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyCn074Y2qun8KPMpmtzOZaUrJTe2CMAHP8",
-  authDomain: "smartpayplug.firebaseapp.com",
-  projectId: "smartpayplug",
-  storageBucket: "smartpayplug.firebasestorage.app",
-  messagingSenderId: "4206063973",
-  appId: "1:4206063973:web:198f4ce9b0afbf1955318c"
-};
+const firebaseConfig = { /* SAME AS YOURS */ };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+window.logout = async ()=>{ await signOut(auth); };
+
+window.saveProfile = async ()=>{
+  const user = auth.currentUser;
+  await setDoc(doc(db,"users",user.uid),{
+    name:document.getElementById("nameInput").value,
+    phone:document.getElementById("phoneInput").value,
+    email:user.email,
+    updatedAt:serverTimestamp()
+  },{merge:true});
+  alert("Profile updated");
+};
+
+async function loadProfile(user){
+  const snap = await getDoc(doc(db,"users",user.uid));
+  if(snap.exists()){
+    const d=snap.data();
+    document.getElementById("nameInput").value=d.name||"";
+    document.getElementById("phoneInput").value=d.phone||"";
+  }
+  document.getElementById("emailDisplay").value=user.email;
+}
+
 window.loginWithGoogle = async ()=>{
   const provider = new GoogleAuthProvider();
   const result = await signInWithPopup(auth,provider);
   const user = result.user;
-
   await setDoc(doc(db,"users",user.uid),{
     name:user.displayName,
     email:user.email,
@@ -241,42 +331,23 @@ window.loginWithGoogle = async ()=>{
 };
 
 window.loginWithEmail = async ()=>{
-  const email = document.querySelectorAll(".login-input")[0].value.trim();
-  const password = document.querySelectorAll(".login-input")[1].value.trim();
-
-  if(!email || !password){
-    alert("Please enter email and password");
-    return;
-  }
-
+  const email=document.querySelectorAll(".login-input")[0].value;
+  const password=document.querySelectorAll(".login-input")[1].value;
   try{
     await signInWithEmailAndPassword(auth,email,password);
-  }catch(error){
-
-    if(error.code === "auth/user-not-found"){
-      try{
-        await createUserWithEmailAndPassword(auth,email,password);
-        alert("Account created successfully!");
-      }catch(e){
-        alert(e.message);
-      }
-
-    }else if(error.code === "auth/wrong-password"){
-      alert("Wrong password. Try again.");
-    }else{
-      alert(error.message);
-    }
+  }catch{
+    await createUserWithEmailAndPassword(auth,email,password);
   }
 };
 
 onAuthStateChanged(auth,(user)=>{
   const login=document.getElementById("loginPage");
   const appDiv=document.querySelector(".app");
-
   if(user){
     login.style.display="none";
     appDiv.style.display="flex";
     document.getElementById("userInfo").innerText="Logged in: "+user.email;
+    loadProfile(user);
   }else{
     login.style.display="flex";
     appDiv.style.display="none";
