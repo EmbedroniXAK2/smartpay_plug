@@ -849,7 +849,22 @@ function showPage(page,btn){
   btn.classList.add('active');
 }
 
-function pay(url){ window.open(url,'_blank'); }
+window.pay = async (url, amount, plan)=>{
+  const user = auth.currentUser;
+
+  if(!user){
+    alert("Please login first");
+    return;
+  }
+
+  await addDoc(collection(db,"users",user.uid,"payments"),{
+    amount: amount,
+    plan: plan,
+    time: new Date().toLocaleString()
+  });
+
+  window.location.href = url;
+};
 
 function showToast(msg,isErr){
   const t=document.getElementById('toast');
