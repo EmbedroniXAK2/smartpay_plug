@@ -910,6 +910,46 @@ function filterTxn(val,btn){
 
 <!-- FIREBASE -->
 <script type="module">
+
+// 🔽 ADD HERE (below imports or below db init)
+
+async function loadRealData(user){
+
+  const snap = await getDocs(collection(db,"users",user.uid,"payments"));
+
+  let total = 0;
+  const list = document.getElementById("historyList");
+
+  list.innerHTML = "";
+
+  if(snap.empty){
+    list.innerHTML = '<div class="empty"><span class="emoji">📭</span>No transactions yet</div>';
+  }
+
+  snap.forEach(doc=>{
+    const d = doc.data();
+    total += Number(d.amount);
+
+    list.innerHTML += `
+      <div class="txn-row">
+        <div class="txn-icon">⚡</div>
+        <div class="txn-info">
+          <div class="txn-title">${d.plan}</div>
+          <div class="txn-date">${d.time}</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="txn-amt">₹${d.amount}</div>
+          <div class="txn-status">✓ Initiated</div>
+        </div>
+      </div>
+    `;
+  });
+
+  const revenueBox = document.querySelector('.card-value.grad');
+  if(revenueBox) revenueBox.innerText = "₹" + total;
+}
+
+</script>
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
